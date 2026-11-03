@@ -39,14 +39,71 @@ function App() {
                 {/* Patient Portal */}
                 <Route path="/patient" element={<PatientDashboard />} />
                 <Route path="/patient/profile" element={<PatientProfile />} />
-                <Route path="/patient/reminders" element={<PatientReminders />} />
+                <Route
+                  path="/patient/reminders"
+                  element={<PatientReminders />}
+                />
                 <Route path="/patient/family" element={<PatientFamily />} />
                 <Route path="/patient/games" element={<PatientAllGames />} />
-                <Route path="/patient/games/market-day-basket" element={<MarketDayBasket />} />
-                <Route path="/patient/games/daily-routine-sequencer" element={<DailyRoutineSequencer />} />
-                <Route path="/patient/games/faces-family-recall" element={<FacesFamilyRecall />} />
-                <Route path="/patient/games/sound-rhythm-match" element={<SoundRhythmMatch />} />
-                <Route path="/patient/games/odd-one-out" element={<OddOneOut />} />
+                <Route
+                  path="/patient/games/market-day-basket"
+                  element={<MarketDayBasket />}
+                />
+                <Route
+                  path="/patient/games/daily-routine-sequencer"
+                  element={<DailyRoutineSequencer />}
+                />
+                <Route
+                  path="/patient/games/faces-family-recall"
+                  element={<FacesFamilyRecall />}
+                />
+                <Route
+                  path="/patient/games/sound-rhythm-match"
+                  element={<SoundRhythmMatch />}
+                />
+                <Route
+                  path="/patient/games/odd-one-out"
+                  element={<OddOneOut />}
+                />
                 <Route path="/patient/login" element={<PatientLogin />} />
+
+                {/* Caregiver Portal */}
+                <Route path="/caregiver/login" element={<CaregiverLogin />} />
+                <Route path="/caregiver" element={<CaregiverDashboard />} />
+                <Route
+                  path="/caregiver/patient/:id"
+                  element={<CaregiverPatientDetail />}
+                />
+                <Route
+                  path="/caregiver/patient/:id/games"
+                  element={<CaregiverCognitiveGames />}
+                />
+                <Route
+                  path="/caregiver/notifications"
+                  element={<CaregiverNotifications />}
+                />
+                <Route
+                  path="/caregiver/profile"
+                  element={<CaregiverProfile />}
+                />
+
+                {/* Legal & Compliance */}
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+
+                {/* Catch-all */}
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </ErrorBoundary>
+          </main>
+          {/* Floating AI Chatbot for Patient Portal */}
+          <PatientChatbot />
+
+          {/* In-App PWA Install Banner & Guidance */}
+          <PwaInstallPrompt />
+        </div>
+      </Router>
+    </AppProvider>
+  );
+}
 
 export default App;
