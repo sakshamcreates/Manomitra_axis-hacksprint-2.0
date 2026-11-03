@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: manomitra-backend
+    name: manomitra-axis-backend
     runtime: node
     rootDir: backend
     buildCommand: npm install
@@ -31,7 +31,7 @@ services:
       - key: MY_WHATSAPP_NUMBER
         sync: false
   - type: web
-    name: manomitra-ai-engine
+    name: manomitra-axis-ai-engine
     runtime: docker
     rootDir: ai-engine
     dockerfilePath: ./Dockerfile
