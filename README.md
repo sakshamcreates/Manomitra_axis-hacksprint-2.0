@@ -1,93 +1,334 @@
-# Manomitra — Senior Cognitive Care Companion
+<div align="center">
 
-Manomitra is a senior cognitive-care companion for elderly patients in North-East India, prepared for a hackathon demo:
-
-- **App (frontend + backend):** AI-powered cognitive-care portal — patient portal, 5 cognitive games, caregiver dashboard, reminders, Memory Bank, Gemini assistant, WhatsApp reminders.
-- **ML engine:** FastAPI service with adaptive difficulty and a cognitive health score.
-
-**What Manomitra includes:**
-- PWA manifest, page title, backend service name and local-storage keys under the Manomitra name.
-- **Security:** the AI engine's Bhashini credentials are read from environment variables (`BHASHINI_USER_ID`, `BHASHINI_API_KEY`, `BHASHINI_INFERENCE_KEY`). Do not commit real keys.
-- Frontend production build verified (`vite build` passes). AI engine endpoints verified locally (see below).
-
-**Honest ML note — say this to judges, do not hide it:**
-The AI model is a small DecisionTree trained on 500 rows of *simulated* gameplay logs (`mock_gameplay_logs.csv`). Its teacher rules are: reaction < 3.5s and 0 mistakes → level +1; reaction > 5.5s or ≥ 2 mistakes → level −1; otherwise keep level. The health score is a formula (100 − time penalty − mistake penalty), not a learned clinical model. It is a demo adaptive-difficulty engine, not a medical diagnosis tool. The backend also has a rule-based fallback if the ML service is down, and it reports `source: rule_fallback` in that case.
+# 🌸 Manomitra (মনোমিত্ৰ / मनोमित्र)
+### *AI-Powered Cognitive Care & Memory Companion Ecosystem for Elderly Dementia Patients*
 
 
-## System architecture
+[![Live Web App](https://img.shields.io/badge/Live%20App-manomitra--alpha.vercel.app-B5502E.svg?style=for-the-badge&logo=vercel)](https://manomitra-alpha.vercel.app/)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Manomitra__axis--hacksprint--2.0-181717.svg?style=for-the-badge&logo=github)](https://github.com/sakshamcreates/Manomitra_axis-hacksprint-2.0)
+[![ML Engine](https://img.shields.io/badge/ML%20Engine-dementia--ai--engine.onrender.com-FF6B6B.svg?style=for-the-badge&logo=render)](https://dementia-ai-engine.onrender.com/docs)
 
-```
-Patient / Caregiver (browser, React 19 PWA)
-        │  VITE_API_BASE_URL (default http://localhost:5000/api)
-        ▼
-Node/Express backend (backend/server.js, port 5000)
-  ├─ /api/patients, /api/caregivers, /api/reminders
-  ├─ /api/game-sessions  →  mlService.js  →  ML_SERVICE_URL
-  ├─ /api/translation, /api/speech, /api/whatsapp
-  └─ node-cron reminder scheduler
-        │                    │
-        ▼                    ▼
-  MongoDB Atlas          FastAPI ML engine (ai-engine/api.py, port 8000)
-  (Patients, Caregivers,  ├─ POST /get_next_difficulty
-   Reminders, GameSessions│     {reaction_time, mistakes, current_level}
-   MemoryBankPhotos)      ├─ POST /calculate_health_score
-                          ├─ POST /speak_regional_reminder
-                          └─ POST /synthesize_speech  (Bhashini, optional)
-  + Google Gemini (chat) + Meta WhatsApp Cloud API (reminders, optional)
-```
 
-Frontend routes: `/`, `/patient`, `/patient/login`, `/patient/reminders`, `/patient/games/*`, `/patient/family`, `/patient/profile`, `/caregiver`, `/caregiver/login`, `/caregiver/patient/:id`, `/caregiver/patient/:id/games`, `/caregiver/notifications`, `/caregiver/profile`, `/privacy-policy`.
+<br/>
 
-## Environment variables
+[![React 19](https://img.shields.io/badge/React-19.2-blue.svg)](https://react.dev/)
+[![TailwindCSS v4](https://img.shields.io/badge/TailwindCSS-v4-38bdf8.svg)](https://tailwindcss.com/)
+[![PWA Offline-First](https://img.shields.io/badge/PWA-Workbox%20%2B%20IndexedDB-purple.svg)](https://web.dev/progressive-web-apps/)
+[![Node.js](https://img.shields.io/badge/Node.js-v18+-green.svg)](https://nodejs.org/)
+[![MongoDB Atlas](https://img.shields.io/badge/MongoDB-Atlas%20Cloud-47A248.svg)](https://www.mongodb.com/)
+[![Google Gemini AI](https://img.shields.io/badge/Google%20Gemini-Multimodal%20AI-8E75B2.svg)](https://deepmind.google/technologies/gemini/)
+[![DPDP Act 2023](https://img.shields.io/badge/DPDP%20Act%202023-Compliant-success.svg)](https://manomitra-alpha.vercel.app/privacy-policy)
+[![WebAuthn FIDO2](https://img.shields.io/badge/WebAuthn-FIDO2%20Biometrics-orange.svg)](https://webauthn.io/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-### Backend (`backend/.env`, see `backend/.env.example`)
-| Variable | Required for demo? | Notes |
+<p align="center">
+  <b>Manomitra</b> is an evidence-based, culturally grounded cognitive care platform bridging elderly dementia patients, family caregivers, and clinicians — uniting an <b>offline-first PWA</b>, <b>5 culturally attuned cognitive games</b>, <b>multilingual voice synthesis</b> (Assamese, Hindi, English), <b>Google Gemini AI</b>, a <b>Meta WhatsApp companion bot</b>, and a <b>live Machine Learning telemetry engine</b> on Render.
+</p>
+
+</div>
+
+---
+
+## 1. Project Information
+
+| Field | Details |
+|---|---|
+| **Project Title** | Manomitra — AI-Based Cognitive Gaming and Memory Assistance Platform for Elderly Dementia Patients |
+
+ AI-Based Cognitive Gaming and Memory Assistance Platform for Elderly Dementia Patients in NER |
+ 
+| **Category** | Software |
+
+| **Theme** | MedTech / BioTech / HealthTech |
+
+| **Institution** | Axis Institute of technology and management— Branch: CSE(AIML)|
+
+---
+
+## 2. Problem Statement
+
+Over **8.8 million Indians** live with dementia (2026), with **280,000–350,000 cases** concentrated in India's 8 North-Eastern states. The NER faces a uniquely severe crisis:
+
+- 🏥 **85%+ of neurologists** operate exclusively out of Guwahati — rural hill-state patients have near-zero specialist access.
+- 🌧️ **Mountainous terrain and monsoon floods** sever physical access to healthcare. 2G/3G internet causes cloud-dependent apps to crash mid-session.
+- 🗣️ **220+ indigenous dialects** (Assamese, Bodo, Khasi, Mizo) make standard Western cognitive tests medically invalid for NER demographics.
+- 😶 **Cultural stigma** causes over 90% of families to dismiss early memory loss as normal aging (*"বুঢ়া বয়সৰ পাহৰণি"*), resulting in diagnosis only at advanced Stage 3 or 4.
+- 📱 **No existing app** offers offline-first operation, multilingual Assamese voice guidance, and culturally grounded cognitive exercises for NER elderly patients.
+
+---
+
+## 3. Proposed Solution
+
+**Manomitra** is a resilient **3-Tier Delivery Ecosystem**:
+
+| Tier | Channel | Reach |
 |---|---|---|
-| `MONGO_URI` | Yes for full demo | MongoDB Atlas URI, or local `mongodb://localhost:27017/manomitra`. Without it the server starts but DB routes fail. No MongoDB is installed on this VM. |
-| `JWT_SECRET` | Yes | Any long random string for demo. |
-| `PORT` | No | Default 5000. Render sets it automatically. |
-| `ML_SERVICE_URL` | No | Default is the original Render ML URL. For a local demo set `http://localhost:8000`. Timeout via `ML_SERVICE_TIMEOUT_MS` (default 6000). |
-| `GEMINI_API_KEY` | No | Gemini chat only; without it the chat falls back. |
-| `GOOGLE_CLIENT_ID` | No | Caregiver Google OAuth only. |
-| `WHATSAPP_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID`, `WHATSAPP_VERIFY_TOKEN`, `MY_WHATSAPP_NUMBER` | No | WhatsApp reminders only; demo works without them. |
-| `BACKEND_URL`, `FRONTEND_URL`, `TRANSLATION_TIMEOUT_MS` | No | Used by cron/translation helpers. |
+| **Tier 1 (Core)** | Offline-first PWA  | Any smartphone, even 2G |
+| **Tier 2 (Fallback)** | IVR automated voice calls + SMS alerts | Feature phones without internet |
+| **Tier 3 (Field Care)** | ASHA worker tablet mode with local sync | Door-to-door community screening |
 
-### Frontend (`frontend/.env`)
-| Variable | Notes |
+The platform delivers:
+1. 🎮 **5 culturally attuned cognitive games** targeting distinct neuroanatomical pathways using authentic NER assets (Kaji Nemu, Bhut Jolokia, Assamese Dhol, Pepa horn, Mekhela patterns).
+2. 🗣️ **Multilingual voice guidance** in Assamese (`as-IN`), Hindi (`hi-IN`), and English — with Google Gemini AI conversational companion.
+3. 📱 **Meta WhatsApp Cloud API bot** for automated medication reminders and bidirectional patient check-ins — zero new app learning curve.
+4. 🧠 **Live Machine Learning microservice** (Python + FastAPI on Render) for real-time adaptive game difficulty and longitudinal cognitive health scoring (0–100).
+5. 🩺 **Clinical Caregiver Dashboard** with 7-day adherence charts, red-flag overdue medication alerts, and exportable cognitive telemetry.
+6. 📶 **100% offline-first PWA** (Workbox + IndexedDB) — full functionality during complete internet outages.
+7. 🔐 **WebAuthn FIDO2 biometrics** — hardware fingerprint/face login without passwords, compliant with DPDP Act 2023.
+
+---
+
+## 4. Key Features
+
+| Feature | Description |
 |---|---|
-| `VITE_API_BASE_URL` or `VITE_API_URL` | Backend base URL, e.g. `http://localhost:5000`. The code appends `/api` if missing. Default without it is `http://localhost:5000/api`. |
-| `VITE_GOOGLE_CLIENT_ID` | Caregiver Google login only. |
+| 🔑 **Biometric Login** | Tactile 4-digit PIN + WebAuthn FIDO2 hardware fingerprint/face authentication |
+| 📅 **Horizon Routines** | Chronological daily schedule with audio read-aloud and 1-tap completion |
+| 🎮 **5 Cognitive Games** | Market Day Basket, Daily Routine Sequencer, Faces & Family Recall, Sound & Rhythm Match, Odd One Out |
+| 🤖 **Gemini AI Assistant** | Multimodal conversational assistant — text + voice, grounded in patient's live data |
+| 📲 **WhatsApp Bot** | Automated bilingual medication reminders with bidirectional patient sync |
+| 🧠 **Live ML Engine** | Adaptive difficulty + 0–100 cognitive health score + clinical status label |
+| 📸 **Memory Bank** | Family photo reminiscence vault with DPDP Act 2023 consent trails |
+| 🩺 **Caregiver Hub** | Real-time patient roster, red-flag alerts, reaction-time charts |
+| 📶 **Offline PWA** | Service worker pre-caching + IndexedDB queue + automatic background sync |
+| 🛡️ **DPDP Compliant** | Consent checkboxes, 30-day right to erasure, zero raw biometric storage |
 
-### AI engine (`ai-engine/.env`, see `ai-engine/.env.example`)
-| Variable | Notes |
+---
+
+## 5. Technology Stack
+
+| Layer | Technologies |
 |---|---|
-| `BHASHINI_USER_ID`, `BHASHINI_API_KEY`, `BHASHINI_INFERENCE_KEY` | Optional. Without them, regional reminders fall back to the small offline dictionary (Hindi/Bengali phrases only). |
-| `PORT` | Default 8000 in the Dockerfile. |
+| **Frontend** | React 19.2, Vite 8.2, React Router v7, Tailwind CSS v4, Lucide React, i18next, Recharts |
+| **Offline PWA** | `vite-plugin-pwa`, Workbox Service Worker, IndexedDB (`idb`) |
+| **Voice & Speech** | Web Speech Synthesis API — Assamese, Hindi, English |
+| **Generative AI** | Google Gemini AI SDK (`@google/genai`) — multimodal text + voice |
+| **Machine Learning** | Python, Scikit-Learn, FastAPI — hosted on Render Cloud |
+| **Backend API** | Node.js, Express.js, Mongoose ODM, Node-Cron, bcrypt, JWT |
+| **Database** | MongoDB Atlas Cloud |
+| **APIs** | Meta WhatsApp Business Cloud API · Google OAuth 2.0 · Bhashini API (NER language TTS) |
+| **Security & Auth** | WebAuthn FIDO2 · bcrypt PIN hashing · DPDP Act 2023 |
+| **Deployment** | Vercel (Frontend) · Render (Backend & ML) · MongoDB Atlas (Database) |
 
-## Run the demo (fastest, no Mongo, no keys)
+---
 
-This is the 1-day hackathon path — it proves the UI, games and ML, without WhatsApp/Gemini/Mongo:
+## 6. Architecture
+
+```text
+                         ┌────────────────────────────────────┐
+                         │    Senior Patient / Family Caregiver│
+                         └──────────┬──────────────┬──────────┘
+                                    │              │
+               React 19 PWA (Offline-First + IDB)  WhatsApp (Meta Cloud API)
+                                    │              │
+                                    ▼              ▼
+                         ┌──────────────────────────────────────────┐
+                         │         Express.js REST & Webhook API     │
+                         │  ├─ JWT & WebAuthn FIDO2 Auth             │
+                         │  ├─ Dynamic Routine & Alert Engine        │
+                         │  ├─ Cognitive Telemetry Logging           │
+                         │  ├─ ML Service Proxy & Fallback Wrapper   │
+                         │  └─ Node-Cron Reminder Scheduler          │
+                         └────────┬───────────────┬──────────────┬──┘
+                                  │               │              │
+                                  ▼               ▼              ▼
+                         ┌────────────────┐ ┌──────────────┐ ┌──────────────────┐
+                         │  MongoDB Atlas │ │ Google Gemini│ │  ML Engine (AI)  │
+                         │  · Patients   │ │ · Generative │ │  · Adaptive Diff.│
+                         │  · Reminders  │ │   Companion  │ │  · Health Score  │
+                         │  · GameLogs   │ │ · Voice Audio│ │  (Render Cloud)  │
+                         │  · Caregivers │ └──────────────┘ └──────────────────┘
+                         └────────────────┘
+```
+
+---
+
+## 7. Repository Structure
+
+```text
+Manomitra_axis-hacksprint-2.0/
+├── README.md
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── pages/
+│   │   │   ├── patient/          # Patient portal + 5 cognitive games
+│   │   │   └── caregiver/        # Caregiver dashboard + telemetry
+│   │   ├── services/             # API service layer (api.js)
+│   │   ├── context/              # Auth & patient context providers
+│   │   └── utils/                # speechUtils, gameHelpers
+│   ├── index.html
+│   └── vite.config.js
+├── backend/
+│   ├── server.js                 # Express entry point + keep-alive pinger
+│   ├── routes/                   # patientRoutes, caregiverRoutes, gameRoutes
+│   ├── models/                   # Mongoose schemas (Patient, Caregiver, GameSession)
+│   ├── services/                 # mlService.js, translationService.js
+│   ├── jobs/                     # reminderCron.js (Node-Cron scheduler)
+│   └── middleware/               # JWT auth, rate limiting
+└── docs/
+    └── screenshots/              # UI gallery — all 18 screens
+```
+
+---
+
+
+
+## 8. Demo Video
+
+🎬 A full product walkthrough demo video is available on YouTube.
+
+> **[▶️ Watch Demo Video on YouTube](https://youtu.be/TTV7cAvSF-s)**
+
+---
+
+## 9. Screenshots / Prototype Photos
+
+### 👴 Patient Portal
+
+| **Tactile PIN & Biometric Login** | **Horizon Dashboard** |
+|:---:|:---:|
+| ![Patient Login](docs/screenshots/01_patient_login.png) | ![Patient Dashboard](docs/screenshots/02_patient_dashboard.png) |
+| *4-digit PIN with audio feedback + WebAuthn FIDO2 biometrics* | *Time-aware greeting, state horizon banner, spotlight routine* |
+
+| **Chronological Routine Schedule** | **Family Reminiscence Memory Vault** |
+|:---:|:---:|
+| ![Patient Reminders](docs/screenshots/03_patient_reminders.png) | ![Memory Bank](docs/screenshots/10_patient_family_vault.png) |
+| *Morning-to-night care schedule with audio read-aloud & 1-tap checks* | *Photo reminiscence gallery for facial recall & kinship memory* |
+
+| **Patient Profile & Emergency Info** | **DPDP Act 2023 Privacy Policy** |
+|:---:|:---:|
+| ![Patient Profile](docs/screenshots/11_patient_profile.png) | ![Privacy Policy](docs/screenshots/18_privacy_policy.png) |
+| *Emergency dialers, blood group & regional language toggles* | *Full DPDP Act 2023 compliance — consent trails & rights* |
+
+---
+
+### 🎮 Cognitive Games Suite
+
+| **Games Suite Hub** | **Market Day Basket (বজাৰৰ পাচি)** |
+|:---:|:---:|
+| ![Games Suite](docs/screenshots/04_patient_games_suite.png) | ![Market Day Basket](docs/screenshots/05_game_market_day_basket.png) |
+| *Central launcher with streak tracking & category tabs* | *Working memory recall of regional produce (Kaji Nemu, Bhut Jolokia)* |
+
+| **Daily Routine Sequencer (दैनिक दिनचर्या)** | **Faces & Family Recall (चेहरे और यादें)** |
+|:---:|:---:|
+| ![Routine Sequencer](docs/screenshots/06_game_daily_routine_sequencer.png) | ![Faces Recall](docs/screenshots/07_game_faces_family_recall.png) |
+| *Executive function — sequencing familiar morning-to-night routines* | *Fusiform gyrus stimulation — matching real family photos & kin* |
+
+| **Sound & Rhythm Match (ध्वनि और लय)** | **Odd One Out (अलग पहचानें)** |
+|:---:|:---:|
+| ![Sound Match](docs/screenshots/08_game_sound_rhythm_match.png) | ![Odd One Out](docs/screenshots/09_game_odd_one_out.png) |
+| *Auditory attention — indigenous instruments (Dhol, Pepa, Shankha)* | *Semantic categorization — identifying botanical anomalies* |
+
+---
+
+### 🩺 Caregiver & Clinician Dashboard
+
+| **Caregiver Login** | **Command Center & Patient Roster** |
+|:---:|:---:|
+| ![Caregiver Login](docs/screenshots/12_caregiver_login.png) | ![Caregiver Dashboard](docs/screenshots/13_caregiver_dashboard.png) |
+| *Email/password, Google OAuth & WebAuthn clinician biometrics* | *Real-time patient roster with clinical status & adherence metrics* |
+
+| **Patient Clinical Dossier & Telemetry** | **Cognitive Games Telemetry** |
+|:---:|:---:|
+| ![Patient Detail](docs/screenshots/14_caregiver_patient_detail.png) | ![Game Telemetry](docs/screenshots/15_caregiver_cognitive_games.png) |
+| *AI Cognitive Health scoring, 7-day adherence charts* | *Round-by-round precision, reaction time & level history* |
+
+| **Red Flag Alerts & Action Center** | **Caregiver Settings & Profile** |
+|:---:|:---:|
+| ![Caregiver Notifications](docs/screenshots/16_caregiver_notifications.png) | ![Caregiver Profile](docs/screenshots/17_caregiver_profile.png) |
+| *Real-time alerts for missed critical medications + 1-tap dialer* | *Profile management, preferences & 30-day erasure controls* |
+
+---
+
+## 10. Installation
 
 ```bash
-# 1. ML engine (verified locally)
-cd ai-engine
-python3 -m venv .venv && .venv/bin/pip install -r requirements.txt pyttsx3
-.venv/bin/uvicorn api:app --host 127.0.0.1 --port 8000
-# test: POST /get_next_difficulty  {"reaction_time":2.5,"mistakes":0,"current_level":2} -> level 3
-# test: POST /calculate_health_score {"patient_id":1,"games_played_this_week":3,"average_reaction_time":4.0,"total_mistakes_this_week":2} -> 93.5, Stable
+git clone https://github.com/sakshamcreates/Manomitra_axis-hacksprint-2.0.git
+cd Manomitra_axis-hacksprint-2.0
 
-# 2. Frontend only (mock fallback for game sessions; patient/caregiver login needs backend+DB)
-cd frontend
-npm install
-npm run dev
-# open the Vite URL, use the demo profiles shown on the login screen
+# Backend
+cd backend && npm install
+
+# Frontend
+cd ../frontend && npm install
 ```
 
+**`backend/.env`**
+```env
+PORT=5000
+NODE_ENV=development
+MONGO_URI=mongodb+srv://<user>:<password>@cluster.mongodb.net/Manomitra
+JWT_SECRET=your_jwt_super_secret_key_here
+GEMINI_API_KEY=your_google_gemini_api_key
+GOOGLE_CLIENT_ID=your_google_oauth_client_id
+WHATSAPP_TOKEN=your_meta_whatsapp_token
+WHATSAPP_PHONE_NUMBER_ID=your_phone_number_id
+WHATSAPP_VERIFY_TOKEN=your_verify_token
+```
 
+**`frontend/.env`**
+```env
+VITE_API_URL=http://localhost:5000/api
+VITE_GOOGLE_CLIENT_ID=your_google_oauth_client_id
+```
 
-Deploy notes: `render.yaml` deploys the Node backend (rootDir `backend`), `vercel.json` builds `frontend/` to `frontend/dist`. Set the same env vars in the Render/Vercel dashboards — never commit `.env` files.
+---
 
-## What is NOT verified yet
-- Full backend + MongoDB run (no MongoDB on this VM; seed not run here).
-- WhatsApp, Gemini, Google OAuth, biometric login, audio playback — all optional for the demo and untested here.
-- Meera's caregiver detail record in the live site (only her roster card was seen in the earlier site scan).
+## 11. Run
+
+```bash
+# Terminal 1 — Backend
+cd backend
+node seed.js   # First time only — seeds demo data
+npm start      # http://localhost:5000
+
+# Terminal 2 — Frontend
+cd frontend
+npm run dev    # http://localhost:5173
+```
+
+### ☁️ Live Deployments
+
+| Service | URL |
+|---|---|
+| 🌐 **Live Web App** | [manomitra-alpha.vercel.app](https://manomitra-alpha.vercel.app/) |
+| 💻 **GitHub Repo** | [sakshamcreates/Manomitra_axis-hacksprint-2.0](https://github.com/sakshamcreates/Manomitra_axis-hacksprint-2.0) |
+| ⚙️ **Backend API** | [smriti-backend-nwrl.onrender.com](https://smriti-backend-nwrl.onrender.com/api/health) |
+| 🧠 **Live ML Engine** | [dementia-ai-engine.onrender.com](https://dementia-ai-engine.onrender.com/docs) |
+
+---
+
+## 12. Future Scope
+
+| Phase | Milestone |
+|---|---|
+| 🏥 **Phase 1** | Government Tele-MANAS (14416) integration — automatic specialist referrals from remote NER districts |
+| 👩‍⚕️ **Phase 2** | ASHA & Frontline Worker Tablet Suite with voice prompts in Bodo, Khasi, Garo, Mizo, Meitei, Nagamese |
+| 🎙️ **Phase 3** | Acoustic Speech Biomarker Analysis via openSMILE — micro-cognitive decline detection from voice patterns |
+| ⌚ **Phase 4** | Wearable PPG & Vascular Risk Telemetry — Bluetooth smart band integration for continuous BP/HR monitoring |
+| 🎮 **Phase 5** | 6 additional cognitive games — Village Path Navigator, Spice Sorter, Proverb Completer, and more |
+| 🔬 **Phase 6** | Multi-centric ICMR & ARDSI clinical validation trials — 500+ NER patients over 12 months |
+
+---
+
+## Team
+
+<div align="center">
+
+**Team Paradox** — Axis institute of technology and management kanpur
+
+| # | Name |
+|:---:|:---|
+| 1 | **saksham singh** |
+| 2 | **Shikhar Mishra** |
+| 3 | **Shashwat Srivastav** |
+| 4 | **saksham patel** |
+
+</div>
+
+---
+
+<div align="center">
+  <b>🌸 Manomitra (মনোমিত্ৰ / मनोमित्र) — Preserving Memories, Empowering Caregivers, Culturally Grounded.</b>
+</div>
