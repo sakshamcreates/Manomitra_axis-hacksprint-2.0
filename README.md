@@ -159,20 +159,16 @@ Manomitra_axis-hacksprint-2.0/
 │   │   └── utils/                # speechUtils, gameHelpers
 │   ├── index.html
 │   └── vite.config.js
-├── backend/
-│   ├── server.js                 # Express entry point + keep-alive pinger
-│   ├── routes/                   # patientRoutes, caregiverRoutes, gameRoutes
-│   ├── models/                   # Mongoose schemas (Patient, Caregiver, GameSession)
-│   ├── services/                 # mlService.js, translationService.js
-│   ├── jobs/                     # reminderCron.js (Node-Cron scheduler)
-│   └── middleware/               # JWT auth, rate limiting
-└── docs/
-    └── screenshots/              # UI gallery — all 18 screens
+└── backend/
+    ├── server.js                 # Express entry point + keep-alive pinger
+    ├── routes/                   # patientRoutes, caregiverRoutes, gameRoutes
+    ├── models/                   # Mongoose schemas (Patient, Caregiver, GameSession)
+    ├── services/                 # mlService.js, translationService.js
+    ├── jobs/                     # reminderCron.js (Node-Cron scheduler)
+    └── middleware/               # JWT auth, rate limiting
 ```
 
 ---
-
-
 
 ## 8. Demo Video
 
@@ -182,66 +178,7 @@ Manomitra_axis-hacksprint-2.0/
 
 ---
 
-## 9. Screenshots / Prototype Photos
-
-### 👴 Patient Portal
-
-| **Tactile PIN & Biometric Login** | **Horizon Dashboard** |
-|:---:|:---:|
-| ![Patient Login](docs/screenshots/01_patient_login.png) | ![Patient Dashboard](docs/screenshots/02_patient_dashboard.png) |
-| *4-digit PIN with audio feedback + WebAuthn FIDO2 biometrics* | *Time-aware greeting, state horizon banner, spotlight routine* |
-
-| **Chronological Routine Schedule** | **Family Reminiscence Memory Vault** |
-|:---:|:---:|
-| ![Patient Reminders](docs/screenshots/03_patient_reminders.png) | ![Memory Bank](docs/screenshots/10_patient_family_vault.png) |
-| *Morning-to-night care schedule with audio read-aloud & 1-tap checks* | *Photo reminiscence gallery for facial recall & kinship memory* |
-
-| **Patient Profile & Emergency Info** | **DPDP Act 2023 Privacy Policy** |
-|:---:|:---:|
-| ![Patient Profile](docs/screenshots/11_patient_profile.png) | ![Privacy Policy](docs/screenshots/18_privacy_policy.png) |
-| *Emergency dialers, blood group & regional language toggles* | *Full DPDP Act 2023 compliance — consent trails & rights* |
-
----
-
-### 🎮 Cognitive Games Suite
-
-| **Games Suite Hub** | **Market Day Basket (বজাৰৰ পাচি)** |
-|:---:|:---:|
-| ![Games Suite](docs/screenshots/04_patient_games_suite.png) | ![Market Day Basket](docs/screenshots/05_game_market_day_basket.png) |
-| *Central launcher with streak tracking & category tabs* | *Working memory recall of regional produce (Kaji Nemu, Bhut Jolokia)* |
-
-| **Daily Routine Sequencer (दैनिक दिनचर्या)** | **Faces & Family Recall (चेहरे और यादें)** |
-|:---:|:---:|
-| ![Routine Sequencer](docs/screenshots/06_game_daily_routine_sequencer.png) | ![Faces Recall](docs/screenshots/07_game_faces_family_recall.png) |
-| *Executive function — sequencing familiar morning-to-night routines* | *Fusiform gyrus stimulation — matching real family photos & kin* |
-
-| **Sound & Rhythm Match (ध्वनि और लय)** | **Odd One Out (अलग पहचानें)** |
-|:---:|:---:|
-| ![Sound Match](docs/screenshots/08_game_sound_rhythm_match.png) | ![Odd One Out](docs/screenshots/09_game_odd_one_out.png) |
-| *Auditory attention — indigenous instruments (Dhol, Pepa, Shankha)* | *Semantic categorization — identifying botanical anomalies* |
-
----
-
-### 🩺 Caregiver & Clinician Dashboard
-
-| **Caregiver Login** | **Command Center & Patient Roster** |
-|:---:|:---:|
-| ![Caregiver Login](docs/screenshots/12_caregiver_login.png) | ![Caregiver Dashboard](docs/screenshots/13_caregiver_dashboard.png) |
-| *Email/password, Google OAuth & WebAuthn clinician biometrics* | *Real-time patient roster with clinical status & adherence metrics* |
-
-| **Patient Clinical Dossier & Telemetry** | **Cognitive Games Telemetry** |
-|:---:|:---:|
-| ![Patient Detail](docs/screenshots/14_caregiver_patient_detail.png) | ![Game Telemetry](docs/screenshots/15_caregiver_cognitive_games.png) |
-| *AI Cognitive Health scoring, 7-day adherence charts* | *Round-by-round precision, reaction time & level history* |
-
-| **Red Flag Alerts & Action Center** | **Caregiver Settings & Profile** |
-|:---:|:---:|
-| ![Caregiver Notifications](docs/screenshots/16_caregiver_notifications.png) | ![Caregiver Profile](docs/screenshots/17_caregiver_profile.png) |
-| *Real-time alerts for missed critical medications + 1-tap dialer* | *Profile management, preferences & 30-day erasure controls* |
-
----
-
-## 10. Installation
+## 9. Installation
 
 ```bash
 git clone https://github.com/sakshamcreates/Manomitra_axis-hacksprint-2.0.git
@@ -275,7 +212,7 @@ VITE_GOOGLE_CLIENT_ID=your_google_oauth_client_id
 
 ---
 
-## 11. Run
+## 10. Run
 
 ```bash
 # Terminal 1 — Backend
@@ -299,7 +236,7 @@ npm run dev    # http://localhost:5173
 
 ---
 
-## 12. Future Scope
+## 11. Future Scope
 
 | Phase | Milestone |
 |---|---|
@@ -322,7 +259,7 @@ npm run dev    # http://localhost:5173
 |:---:|:---|
 | 1 | **saksham singh** |
 | 2 | **Shikhar Mishra** |
-| 3 | **Naman Shukla** |
+| 3 | **Shashwat Srivastav** |
 | 4 | **saksham patel** |
 
 </div>
