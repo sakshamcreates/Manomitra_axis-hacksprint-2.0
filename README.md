@@ -322,7 +322,7 @@ npm run dev    # http://localhost:5173
 |:---:|:---|
 | 1 | **saksham singh** |
 | 2 | **Shikhar Mishra** |
-| 3 | **Shashwat Srivastav** |
+| 3 | **Naman Shukla** |
 | 4 | **saksham patel** |
 
 </div>
