@@ -153,6 +153,7 @@
   }
 }
 
+
 #spacer {
   height: 88px;
   border-top: 1px solid var(--border);
@@ -177,6 +178,7 @@
     left: 0;
     border-left-color: var(--border);
   }
+
   &::after {
     right: 0;
     border-right-color: var(--border);
