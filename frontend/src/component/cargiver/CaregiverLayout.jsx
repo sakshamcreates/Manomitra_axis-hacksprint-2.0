@@ -133,7 +133,28 @@ export default function CaregiverLayout({
             </Link>
           </div>
 
-          
+          {/* Quick Actions / Security Section */}
+          <div className="space-y-1.5">
+            <div className="px-3 pb-2 text-[11px] font-bold uppercase tracking-widest text-emerald-200/50">
+              Operations & Security
+            </div>
+
+            {onOpenAddPatient && (
+              <button
+                type="button"
+                onClick={onOpenAddPatient}
+                className="w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer text-left group"
+              >
+                <div className="flex items-center gap-3">
+                  <UserPlus className="w-4.5 h-4.5 text-slate-400 group-hover:text-emerald-300" />
+                  <span>Enroll New Patient</span>
+                </div>
+                <span className="text-xs font-bold text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/40">
+                  + Add
+                </span>
+              </button>
+            )}
+
             {/* Caregiver Profile & Credentials */}
             <Link
               to="/caregiver/profile"
